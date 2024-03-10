@@ -1,6 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, TypeAlias
+from typing import Any
 
-Input: TypeAlias = dict[str, Any] | str | Path
+Input: type = dict[str, Any] | str | Path
