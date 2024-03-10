@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from .input import Input, input_to_dict
+from .loading import Input, input_to_dict
 from .model_generation import PydanticModelGenerator
 from .output_type import OutputType
 

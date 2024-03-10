@@ -9,6 +9,7 @@ packages = [{ include = "config_adapter", from = "config-adapter/src" }]
 python = "^3.10"
 pydantic = "^2.6.3"
 pyyaml = "^6.0.1"
+types-pyyaml = "^6.0.12.12"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.2"
