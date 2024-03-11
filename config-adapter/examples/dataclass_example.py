@@ -9,7 +9,7 @@ def main() -> None:
         amount: float
         currency: str
 
-    existing_models = [Money]
+    existing_models: list[type] = [Money]
 
     # Sample JSON data with elements to match the existing models
     json_data = {

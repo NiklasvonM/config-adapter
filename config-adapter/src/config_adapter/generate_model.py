@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
-
 from .loading import Input, input_to_dict
 from .model_generation import OutputType, get_model_generation_strategy
 
 
 def generate_model(
     source: Input,
-    existing_models: list[type[BaseModel]] | None = None,
+    existing_models: list[type] | None = None,
     output_type: OutputType | None = None,
 ) -> str:
     data = input_to_dict(source)
