@@ -2,7 +2,7 @@ from config_adapter import generate_model
 from pydantic import BaseModel, Field
 
 
-def main():
+def main() -> None:
     class MoneyWithMissing(BaseModel):
         amount: float | None = Field(default=None)
         currency: str
