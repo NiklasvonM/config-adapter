@@ -39,24 +39,22 @@ print(model_code)
 
 ```py
 class ConfigAdapter(BaseModel):
-    class DatabaseConfig(BaseModel):
-        host: str
-        port: int
-        known_hosts: list[str]
-        username: str
-        password: str
-        schema: str
-
     database: DatabaseConfig
-    class LoggingConfig(BaseModel):
-        level: str
-        destination: str
-
     logging: LoggingConfig
-    costs: Money
-    class Another_loggingConfig(BaseModel):
-        level: str
-        destination: str
+    costs: MoneyWithMissing
+    another_logging: LoggingConfig
 
-    another_logging: Another_loggingConfig
+
+class DatabaseConfig(BaseModel):
+    host: str
+    port: int
+    known_hosts: list[str]
+    username: str
+    password: str
+    schema: str
+
+
+class LoggingConfig(BaseModel):
+    level: str
+    destination: str
 ```
