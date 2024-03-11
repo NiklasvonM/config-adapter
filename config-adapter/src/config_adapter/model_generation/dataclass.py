@@ -17,6 +17,6 @@ class DataclassModelGenerator(ModelGenerationStrategy):
             model_code = f"@dataclass\nclass {model.name}:\n"
             for field in model.fields:
                 field_type = field.type.name if isinstance(field.type, Model) else field.type
-                model_code += f"    {field.name}: {field_type}\n"
+                model_code += (" " * 4) + f"{field.name}: {field_type}\n"
             code_blocks.append(model_code)
         return "\n\n".join(code_blocks)

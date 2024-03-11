@@ -16,7 +16,8 @@ class ModelField:
 class Model:
     name: str
     fields: list[ModelField]
-    predefined: bool  # Indicates whether the model is predefined or generated
+    predefined: bool
+    """Indicates whether the model is predefined (by the user) or generated"""
 
     def __init__(self, name: str, predefined: bool = False):
         self.name = name
@@ -44,7 +45,6 @@ class ModelRegistry:
             model = self.models[model_name]
         type_hints = get_type_hints(model_cls)
         for field_name, field_type in type_hints.items():
-            # Simplified type handling, might need to handle more complex cases
             model.add_field(field_name, self._simplify_type(field_type))
 
     def _simplify_type(self, field_type: Any) -> str:
@@ -77,6 +77,5 @@ class ModelRegistry:
         for model in self.models.values():
             model_field_names = {field.name for field in model.fields}
             if model_field_names == set(data.keys()):
-                # Optionally, add further type compatibility checks here
                 return model
         return None

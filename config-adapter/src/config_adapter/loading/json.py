@@ -14,7 +14,6 @@ class JSONLoaderStrategy(LoaderStrategy):
         self.input_source = input_source
 
     def load(self) -> dict[str, Any]:
-        # Implementation for reading JSON files or strings
         with open(self.input_source, encoding="UTF-8") as f:
             result = json.load(f)
         return result
