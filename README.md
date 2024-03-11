@@ -41,7 +41,7 @@ print(model_code)
 class ConfigAdapter(BaseModel):
     database: DatabaseConfig
     logging: LoggingConfig
-    costs: MoneyWithMissing
+    costs: Money
     another_logging: LoggingConfig
 
 
