@@ -1,6 +1,8 @@
 # config-adapter
 
-Create data models from configuration files.
+Create data models from configuration files, taking already defined data models into account.
+
+Currently, `dataclass` as well as Pydantic `BaseModel` generation is supported.
 
 ## Example Usage
 
@@ -34,7 +36,6 @@ json_data = {
 model_code = generate_model(source=json_data, existing_models=existing_models)
 
 print(model_code)
-
 ```
 
 ```py
