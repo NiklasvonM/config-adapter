@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies with Poetry
       run: poetry install
     - name: Run Unittests
-      run: poetry run pytest --cov=./src --cov-report html:coverage-report
+      run: poetry run pytest --cov=./config-adapter/src --cov-report html:coverage-report
     - name: Archive coverage artifacts
       uses: actions/upload-artifact@v4
       with:
