@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from .model_registry import Model, ModelRegistry
+from .util import to_pascal_case
 
 
 class ModelGenerationStrategy(ABC):
@@ -32,7 +33,7 @@ class ModelGenerationStrategy(ABC):
             if matching_model:
                 return matching_model
             # Create a new model
-            sub_model_name = key.capitalize() + "Config"
+            sub_model_name = to_pascal_case(key) + "Config"
             self._generate_recursively(data=value, model_name=sub_model_name)
             return self.registry.get_or_create_model(sub_model_name)
         if isinstance(value, list):
