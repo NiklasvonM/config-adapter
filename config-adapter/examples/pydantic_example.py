@@ -23,12 +23,12 @@ def main() -> None:
             "password": "pass",
             "schema": "public",
         },
-        "logging": {"level": "INFO", "destination": "file"},
+        "first_logging": {"level": "INFO", "destination": "file"},
+        "second_logging": {"level": "WARNING", "destination": "stdout"},
         "costs": {
-            "amount": 10.0,  # Adjusted to float to match MoneyWithoutMissing
+            "amount": 10.0,
             "currency": "USD",
         },
-        "another_logging": {"level": "WARNING", "destination": "stdout"},
     }
 
     model_code = generate_model(source=json_data, existing_models=existing_models)
