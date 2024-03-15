@@ -39,6 +39,8 @@ print(model_code)
 ```
 
 ```py
+from pydantic import BaseModel
+
 class ConfigAdapter(BaseModel):
     database: DatabaseConfig
     logging: LoggingConfig
