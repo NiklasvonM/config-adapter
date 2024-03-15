@@ -11,7 +11,7 @@ def generate_model(
 ) -> str:
     data = input_to_dict(source)
     generator_class = get_model_generation_strategy(output_type or OutputType.PYDANTIC)
-    config = InitConfig(data=data, existing_models=existing_models)
+    config = InitConfig(data=data, existing_models=existing_models or [])
     generator = generator_class(config=config)
     result = generator.generate_model_code()
     return result
