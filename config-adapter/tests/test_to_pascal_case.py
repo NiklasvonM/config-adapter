@@ -1,4 +1,4 @@
-from config_adapter.model_generation.strategies.util import to_pascal_case
+from config_adapter.model_generation.strategies.util.to_pascal_case import to_pascal_case
 
 
 def test_underscores():
