@@ -16,6 +16,3 @@ def to_pascal_case(input_string: str) -> str:
     # Capitalize the first letter of each word and join them together
     pascal_case_string = "".join(word[0].capitalize() + word[1:] for word in words)
     return pascal_case_string
-
-
-print(to_pascal_case("helloWorld"))

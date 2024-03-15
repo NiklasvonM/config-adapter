@@ -1,8 +1,10 @@
-from .dataclass import DataclassModelGenerator
-from .default import DefaultModelGenerator
-from .model_generation import ModelGenerationStrategy
 from .output_type import OutputType
-from .pydantic import PydanticModelGenerator
+from .strategies import (
+    DataclassModelGenerator,
+    DefaultModelGenerator,
+    ModelGenerationStrategy,
+    PydanticModelGenerator,
+)
 
 
 def get_model_generation_strategy(output_type: OutputType) -> type[ModelGenerationStrategy]:
