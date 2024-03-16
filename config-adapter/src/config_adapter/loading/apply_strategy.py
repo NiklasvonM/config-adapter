@@ -26,7 +26,7 @@ def get_strategy(input_source: Input) -> LoaderStrategy:
     return DefaultLoaderStrategy(input_source)
 
 
-def input_to_dict(input_source: Input) -> dict[str, Any]:
+def load_input(input_source: Input) -> dict[str, Any]:
     strategy = get_strategy(input_source)
     result = strategy.load()
     return result

@@ -3,35 +3,31 @@ from __future__ import annotations
 import typing
 from typing import Any, Union, get_args, get_origin, get_type_hints
 
-
-class ModelField:
-    name: str
-    type: str | Model
-
-    def __init__(self, name: str, type: str | Model):
-        self.name = name
-        self.type = type
-
-
-class Model:
-    name: str
-    fields: list[ModelField]
-    predefined: bool
-    """Indicates whether the model is predefined (by the user) or generated"""
-
-    def __init__(self, name: str, predefined: bool = False):
-        self.name = name
-        self.fields = []
-        self.predefined = predefined
-
-    def add_field(self, name: str, type: str | Model):
-        self.fields.append(ModelField(name=name, type=type))
+from .model import Model
 
 
 class ModelRegistry:
+    """
+    A registry for abstract data models.
+    """
+
     models: dict[str, Model]
 
     def __init__(self, existing_models: list[type]):
+        """
+        Initialize the class with existing models.
+
+        Parameters:
+            existing_models (list[type]): A list of existing model types.
+
+        Example:
+            ```
+            class ExistingModel(BaseModel):
+                ...
+
+            model_registry = ModelRegistry(existing_models=[ExistingModel])
+            ```
+        """
         self.models = {}
         for model_cls in existing_models:
             self._add_existing_model(model_cls)
@@ -68,11 +64,23 @@ class ModelRegistry:
         return "Any"
 
     def get_or_create_model(self, name: str) -> Model:
+        """
+        Get or create a model by name.
+
+        Args:
+            name (str): The name of the model.
+
+        Returns:
+            Model: The model object. If the model does not exist, it will be created.
+        """
         if name not in self.models:
             self.models[name] = Model(name=name)
         return self.models[name]
 
     def find_matching_model(self, data: dict[str, Any]) -> Model | None:
+        """
+        Find the model that matches the data. If no model matches it, return None.
+        """
         # TODO: find the best (i.e., the most restrictive) matching model, not just any
         for model in self.models.values():
             model_field_names = {field.name for field in model.fields}

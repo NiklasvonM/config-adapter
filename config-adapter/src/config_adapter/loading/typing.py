@@ -4,4 +4,5 @@ from pathlib import Path
 from typing import Any
 
 Readable = str | Path
-Input = dict[str, Any] | Readable
+Convertable = dict[str, Any]  # TODO: Add support for lists
+Input = Convertable | Readable

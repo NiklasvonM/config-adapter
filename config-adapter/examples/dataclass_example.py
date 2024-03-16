@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from config_adapter import OutputType, generate_model
+from config_adapter import OutputType, generate_data_models
 
 
 def main() -> None:
@@ -21,15 +21,19 @@ def main() -> None:
             "password": "pass",
             "schema": "public",
         },
-        "first_logging": {"level": "INFO", "destination": "file"},
-        "second_logging": {"level": "WARNING", "destination": "stdout"},
+        "logging": {
+            "first_logging": {"level": "INFO", "destination": "file"},
+            "second_logging": {"level": "WARNING", "destination": "stdout"},
+        },
+        "none_type": None,
+        "list_type": [{"field1": 1.0}, {"field1": "str"}],
         "costs": {
             "amount": 10.0,
             "currency": "USD",
         },
     }
 
-    model_code = generate_model(
+    model_code = generate_data_models(
         source=json_data, existing_models=existing_models, output_type=OutputType.DATACLASS
     )
 

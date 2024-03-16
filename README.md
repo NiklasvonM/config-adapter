@@ -1,6 +1,6 @@
 # config-adapter
 
-Create data models from configuration files, taking already defined data models into account.
+Automatically create data models from configuration files, taking already defined data models into account.
 
 Currently, `dataclass` as well as Pydantic `BaseModel` generation is supported.
 
@@ -14,50 +14,51 @@ class Money(BaseModel):
     amount: float
     currency: str
 
-existing_models = [Money]
-
-json_data = {
+configuration = {
     "database": {
         "host": "localhost",
         "port": 5432,
         "known_hosts": ["*"],
         "username": "user",
-        "password": "pass",
-        "schema": "public",
     },
-    "logging": {"level": "INFO", "destination": "file"},
+    "logging": {
+        "first_logging": {"level": "INFO", "destination": "file"},
+        "second_logging": {"level": "WARNING", "destination": "stdout"},
+    },
     "costs": {
         "amount": 10.0,
         "currency": "USD",
     },
-    "another_logging": {"level": "WARNING", "destination": "stdout"},
 }
-
-model_code = generate_model(source=json_data, existing_models=existing_models)
-
+model_code = generate_data_models(source=configuration, existing_models=[Money])
 print(model_code)
 ```
 
 ```py
+from __future__ import annotations
+
 from pydantic import BaseModel
 
 class ConfigAdapter(BaseModel):
     database: DatabaseConfig
     logging: LoggingConfig
+    list_type: list[ListTypeConfig]
     costs: Money
-    another_logging: LoggingConfig
-
 
 class DatabaseConfig(BaseModel):
     host: str
     port: int
     known_hosts: list[str]
     username: str
-    password: str
-    schema: str
-
 
 class LoggingConfig(BaseModel):
+    first_logging: FirstLoggingConfig
+    second_logging: FirstLoggingConfig
+
+class FirstLoggingConfig(BaseModel):
     level: str
     destination: str
+
+class ListTypeConfig(BaseModel):
+    field1: float
 ```

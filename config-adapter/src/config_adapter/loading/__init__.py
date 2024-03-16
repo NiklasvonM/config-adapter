@@ -1,7 +1,7 @@
-from .apply_strategy import input_to_dict
+from .apply_strategy import load_input
 from .typing import Input
 
 __all__ = [
     "Input",
-    "input_to_dict",
+    "load_input",
 ]
