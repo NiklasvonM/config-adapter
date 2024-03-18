@@ -76,7 +76,7 @@ def get_type_string(type_obj: str | Model | UnionType) -> str:
         return type_obj.name  # Use the model's name for representation
     if isinstance(type_obj, UnionType):
         # Assuming UnionType has a method to generate a human-readable string of its types
-        return type_obj.__repr__()
+        return str(type_obj)
     return "Any"  # Fallback for unrecognized types
 
 

@@ -8,12 +8,12 @@ class UnionType:
         self.types = tuple()
         for type in types:
             if isinstance(type, str | Model):
-                self.types += (type,)
+                self.types = tuple(set(self.types) | {type})
             elif isinstance(type, UnionType):
-                self.types += type.types
+                self.types = tuple(set(self.types) | set(type.types))
 
-    def __repr__(self):
-        return " | ".join(t if isinstance(t, str) else t.name for t in self.types)
+    def __str__(self):
+        return " | ".join(str(t) for t in self.types)
 
     def add_type(self, new_type: str | Model | UnionType):
         if new_type not in self.types:
@@ -21,6 +21,11 @@ class UnionType:
                 self.types += (new_type,)
             elif isinstance(new_type, UnionType):
                 self.types += new_type.types
+
+    def __add__(self, new_type: str | Model | UnionType) -> UnionType:
+        result = UnionType(*self.types)
+        result.add_type(new_type=new_type)
+        return result
 
 
 class ModelField:
@@ -63,8 +68,13 @@ class Model:
         """Checks if a field with the given name exists in the model."""
         return any(field.name == name for field in self.fields)
 
-    def __add__(self, other: Model) -> Model:
-        """Merges two models, returning a new model with the combined fields."""
+    def __str__(self) -> str:
+        return self.name
+
+    def __mul__(self, other: Model) -> Model:
+        """
+        Merges two models by taking their "product", returning a new model with the combined fields.
+        """
         new_model = Model(name=other.name, predefined=False)
         for field in self.fields + other.fields:
             new_model.add_field(name=field.name, type=field.type, default=field.default)

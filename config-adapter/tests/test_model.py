@@ -36,7 +36,7 @@ def test_add_duplicate_field_with_different_type_creates_union():
 
 def test_union_type_representation():
     union = UnionType("str", "int")
-    assert repr(union) == "str | int"
+    assert str(union) == "str | int"
 
 
 def test_model_addition_creates_combined_fields():
@@ -44,7 +44,7 @@ def test_model_addition_creates_combined_fields():
     model1.add_field("name", "str")
     model2 = Model(name="Admin")
     model2.add_field("level", "int")
-    combined_model = model1 + model2
+    combined_model = model1 * model2
     assert len(combined_model.fields) == 2
     assert combined_model.field_exists("name")
     assert combined_model.field_exists("level")
