@@ -6,14 +6,14 @@ from typing import Any
 import isort
 from pydantic import BaseModel
 
-from .util.model import Model, UnionType
+from .util.model import DataModel, UnionType
 from .util.model_registry import ModelRegistry
 from .util.to_pascal_case import to_pascal_case
 
 
 class FieldTypeStrategy(ABC):
     @abstractmethod
-    def determine_field_type(self, value: Any, key: str) -> str | Model:
+    def determine_field_type(self, value: Any, key: str) -> str | DataModel:
         pass
 
 
@@ -30,7 +30,7 @@ class DictTypeStrategy(FieldTypeStrategy):
     def __init__(self, generator_strategy: ModelGenerationStrategy):
         self.generator_strategy = generator_strategy
 
-    def determine_field_type(self, value: dict[str, Any], key: str) -> Model:
+    def determine_field_type(self, value: dict[str, Any], key: str) -> DataModel:
         matching_model = self.generator_strategy.registry.find_matching_model(data=value)
         if matching_model:
             return matching_model
@@ -46,8 +46,8 @@ class ListTypeStrategy(FieldTypeStrategy):
     def __init__(self, generator_strategy: ModelGenerationStrategy):
         self.generator_strategy = generator_strategy
 
-    def determine_field_type(self, value: list, key: str) -> str | Model:
-        unique_types: set[str | Model] = set()
+    def determine_field_type(self, value: list, key: str) -> str | DataModel:
+        unique_types: set[str | DataModel] = set()
         for item in value:
             item_type = self.generator_strategy._determine_field_type(value=item, key=key)
             unique_types.add(item_type)
@@ -69,10 +69,10 @@ class ListTypeStrategy(FieldTypeStrategy):
         return f"list[{new_model_name}]"
 
 
-def get_type_string(type_obj: str | Model | UnionType) -> str:
+def get_type_string(type_obj: str | DataModel | UnionType) -> str:
     if isinstance(type_obj, str):
         return type_obj  # Assuming `str` types are already in the correct format
-    if isinstance(type_obj, Model):
+    if isinstance(type_obj, DataModel):
         return type_obj.name  # Use the model's name for representation
     if isinstance(type_obj, UnionType):
         # Assuming UnionType has a method to generate a human-readable string of its types
@@ -111,7 +111,7 @@ class ModelGenerationStrategy(ABC):
         result = dependencies_code + models_code
         return result
 
-    def generate_model_from_dict(self, data: dict[str, Any], model_name: str) -> Model:
+    def generate_model_from_dict(self, data: dict[str, Any], model_name: str) -> DataModel:
         model = self.registry.get_or_create_model(name=model_name)
         for key, value in data.items():
             field_type = self._determine_field_type(value=value, key=key)
@@ -129,7 +129,7 @@ class ModelGenerationStrategy(ABC):
             field_type = self._determine_field_type(value, key)
             model.add_field(name=key, type=field_type)
 
-    def _determine_field_type(self, value: Any, key: str) -> str | Model:
+    def _determine_field_type(self, value: Any, key: str) -> str | DataModel:
         strategy: FieldTypeStrategy
         if isinstance(value, list):
             strategy = ListTypeStrategy(self)

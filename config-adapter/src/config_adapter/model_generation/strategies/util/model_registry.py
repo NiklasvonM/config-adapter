@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from typing import Any, Union, get_args, get_origin, get_type_hints
 
-from .model import Model
+from .model import DataModel
 
 
 class ModelRegistry:
@@ -11,7 +11,7 @@ class ModelRegistry:
     A registry for abstract data models.
     """
 
-    models: dict[str, Model]
+    models: dict[str, DataModel]
 
     def __init__(self, existing_models: list[type]):
         """
@@ -34,14 +34,11 @@ class ModelRegistry:
 
     def _add_existing_model(self, model_cls: type):
         model_name = model_cls.__name__
-        if model_name not in self.models:
-            model = Model(name=model_name, predefined=True)
-            self.models[model_name] = model
-        else:
-            model = self.models[model_name]
+        model = DataModel(name=model_name, predefined=True)
         type_hints = get_type_hints(model_cls)
         for field_name, field_type in type_hints.items():
             model.add_field(field_name, self._simplify_type(field_type))
+        self.models[model_name] = model
 
     def _simplify_type(self, field_type: Any) -> str:
         if get_origin(field_type) in {Union, typing.Union}:
@@ -63,7 +60,7 @@ class ModelRegistry:
         # Fallback for unsupported types
         return "Any"
 
-    def get_or_create_model(self, name: str) -> Model:
+    def get_or_create_model(self, name: str) -> DataModel:
         """
         Get or create a model by name.
 
@@ -74,16 +71,18 @@ class ModelRegistry:
             Model: The model object. If the model does not exist, it will be created.
         """
         if name not in self.models:
-            self.models[name] = Model(name=name)
+            self.models[name] = DataModel(name=name)
         return self.models[name]
 
-    def find_matching_model(self, data: dict[str, Any]) -> Model | None:
+    def find_matching_model(self, data: dict[str, Any]) -> DataModel | None:
         """
         Find the model that matches the data. If no model matches it, return None.
         """
         # TODO: find the best (i.e., the most restrictive) matching model, not just any
         for model in self.models.values():
             model_field_names = {field.name for field in model.fields}
+            # TODO: Match types as well: Type has to be supertype of the data type.
+            # If the types don't match, perhaps log this as an almost matching model.
             if model_field_names == set(data.keys()):
                 return model
         return None
